@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { data } from "./component/arr";
-// import { useNavigate } from "react-router";
 import axios from "axios";
 
 const Game = () => {
@@ -8,26 +6,18 @@ const Game = () => {
   const [answer, setAnswer] = useState("");
   const [found, setFound] = useState(false);
   const [level, setLevel] = useState(2);
-  const [flag, setFlag] = useState(0);
   const [data, setData] = useState([]);
-  const correctAns = "Rose";
-  // const navigate = useNavigate();
-  const getData = async () => {
-    const datas = await axios.get(
-      `https://random-word-api.herokuapp.com/word?number=${level}`
-    );
-    console.log(datas.data);
-    setData(datas.data);
-    return 0;
-  };
-  const createFallingDiv = (i) => {
+  const [correctAns, setCorrectAns] = useState("");
+  const [meaning, setMeaning] = useState("");
+
+  const createFallingDiv = (word) => {
     const container = document.getElementById("container");
     const containerHeight = container.clientHeight;
 
     const fallingDiv = document.createElement("div");
     fallingDiv.className = "falling-div";
     fallingDiv.className = "absolute";
-    fallingDiv.textContent = data[i];
+    fallingDiv.textContent = word;
 
     let startX = Math.random() * (container.clientWidth - 100);
     const startPosition = 0;
@@ -60,29 +50,56 @@ const Game = () => {
   };
 
   useEffect(() => {
-    const container = document.getElementById("container");
-    const containerHeight = container.clientHeight;
-    container.innerHTML = "";
-    const letsDO = async () => {
-      await getData();
-      for (let i = 0; i < level; i++) {
-        setTimeout(() => {
-          createFallingDiv(i);
-        }, i * 500);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://random-word-api.herokuapp.com/word?number=${level}`
+        );
+        setData(response.data);
+        // Create falling divs after data is fetched
+        response.data.forEach((word, index) => {
+          setTimeout(() => {
+            createFallingDiv(word);
+          }, index * 500);
+        });
+        const value = Math.round(Math.random() * level);
+        setCorrectAns(response.data[value]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
-    letsDO();
+
+    fetchData();
   }, [level]);
 
-  const handleNextLevel = (e) => {
-    e.preventDefault();
-    // if (fail === true) {
+  useEffect(() => {
+    const findMeaning = async () => {
+      try {
+        if (correctAns !== "") {
+          const meaning = await axios.get(
+            `https://api.dictionaryapi.dev/api/v2/entries/en/${correctAns}`
+          );
+          setMeaning(meaning.data[0].meanings[0].definitions[0].definition);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    findMeaning();
+  }, [correctAns]);
+
+  const handleNextLevel = () => {
     setLevel(level + 1);
     setFail(false);
     setFound(false);
-    const container = document.getElementById("container");
-    container.innerHTML = ""; // Reset the container
-    // }
+    setData([]); // Clear previous data
+  };
+
+  const handleRestart = () => {
+    setFail(false);
+    setAnswer("");
+    setFound(false);
+    setData([]); // Clear previous data
   };
 
   const handleSubmit = (e) => {
@@ -92,11 +109,7 @@ const Game = () => {
       setFound(true);
     }
   };
-  const handleNavigate = () => {
-    setFail(false);
-    setAnswer("");
-    setFound(false);
-  };
+
   return (
     <div className="flex items-center pt-10 flex-col">
       {"level:" + level}
@@ -106,7 +119,7 @@ const Game = () => {
           id="container"
         ></div>
       </div>
-      <div className="py-10">I am the creator</div>
+      <div className="py-10">{meaning}</div>
       <form
         className="flex justify-center gap-4 w-full"
         onSubmit={(e) => handleSubmit(e)}
@@ -119,26 +132,18 @@ const Game = () => {
         <button className="bg-black text-white text-2xl font-bold rounded-2xl w-32">
           Go
         </button>
-        {data[0]}
         {fail && "fail"}
         {found && (
           <div className="absolute w-2/3 h-2/3 bg-black top-20 text-white">
             <h3>Success : {level}</h3>
-            <br></br>
-            {/* //{!fail ? ( */}
-            {/* <p>Waiting...</p> */}
-            {/* // ) : ( */}
-            <button className="" onClick={(e) => handleNextLevel(e)}>
-              Next Level
-            </button>
-            {/* // )} */}
+            <button onClick={handleNextLevel}>Next Level</button>
           </div>
         )}
         {fail && (
           <div className="absolute w-2/3 h-2/3 bg-black top-20 text-white">
             <div>Game Over</div>
-            <div>Level :{level}</div>
-            <button onClick={handleNavigate}>Restart</button>
+            <div>Level: {level}</div>
+            <button onClick={handleRestart}>Restart</button>
           </div>
         )}
       </form>
