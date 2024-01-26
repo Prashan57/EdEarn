@@ -5,37 +5,24 @@ import LightHome from "./homeTheme/LightHome";
 
 import "../pages/homeTheme/ToggleSwitch.css";
 import "../pages/homeTheme/Background.css";
+import Layout from "./Layout/layout";
 
 const Home = () => {
-  const [isDarkMode, setDarkMode] = useState(false);
-
-  const toggleMode = () => {
-    setDarkMode(!isDarkMode);
-  };
-
   return (
-    <div style={{ flex: 1 }} className="full-page">
-      <div className="background">
-        {isDarkMode ? <DarkHome /> : <LightHome />}
-      </div>
-      <div className="content">
-        <div style={{ height: "0px", width: "0px" }}>
-          {/* <div className={`switch-container ${isDarkMode ? "text" : "text2"}`}>
-            <input
-              type="checkbox"
-              id="toggle"
-              checked={isDarkMode}
-              onChange={toggleMode}
-            />
-            <label id="switch" for="toggle">
-              <div id="circle"></div>
-              <div id="text"></div>
-              <div id="text2"></div>
-            </label>
-          </div> */}
+    <Layout>
+      <div className="relative h-screen overflow-hidden">
+        <DarkHome />
+        <div>
+          {
+            <div class="h-screen flex items-center justify-center">
+              <div class=" p-8 rounded shadow-md">
+                <p>This is a Home Screen container.</p>
+              </div>
+            </div>
+          }
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

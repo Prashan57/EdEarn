@@ -1,18 +1,54 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from "react";
 import { Link } from "react-router-dom";
-
-import { headerStyle, headerLinkStyle } from "../constant/styles/styles";
+import sxc from "./logoo.png";
 
 const Header = () => {
   return (
-    <div style={headerStyle}>
-      <div>
-        <Link to="/" style={headerLinkStyle}>
-          Home
-        </Link>
-      </div>
-      <div>
-        <div>Link</div>
-      </div>
+    <div>
+      <nav class="bg-white border-gray-200 dark:bg-black">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <Link
+            to="/home"
+            class="flex items-center space-x-3 rtl:space-x-reverse"
+          >
+            <img src={sxc} class="h-12" alt="Logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              Edearn
+            </span>
+          </Link>
+
+          <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+            <ul class="font-medium flex flex-col p-4 md:p-0 rounded-lg  md:flex-row md:space-x-8">
+              <li>
+                <Link
+                  to="/home"
+                  class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  aria-current="page"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/game"
+                  class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Game
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/login"
+                  class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Login | SignUp
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </div>
   );
 };

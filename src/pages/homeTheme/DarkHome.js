@@ -109,10 +109,17 @@ const DarkHome = () => {
 
   return (
     <div
-      style={{ overflow: "hidden", margin: 0, height: "100vh", width: "100vw" }}
+      style={{
+        overflow: "hidden",
+        margin: 0,
+        height: "100vh",
+        width: "100vw",
+        zIndex: -1,
+        position: "absolute",
+      }}
     >
-      <canvas ref={canvasRef} style={{ display: "block" }} />
-      <canvas ref={canvas2Ref} style={{ display: "block" }} />
+      <canvas ref={canvasRef} style={{ display: "flex" }} />
+      <canvas ref={canvas2Ref} style={{ display: "flex" }} />
     </div>
   );
 };
