@@ -7,7 +7,7 @@ import "../pages/homeTheme/ToggleSwitch.css";
 import "../pages/homeTheme/Background.css";
 
 const Home = () => {
-  const [isDarkMode, setDarkMode] = useState(true);
+  const [isDarkMode, setDarkMode] = useState(false);
 
   const toggleMode = () => {
     setDarkMode(!isDarkMode);
@@ -20,7 +20,7 @@ const Home = () => {
       </div>
       <div className="content">
         <div style={{ height: "0px", width: "0px" }}>
-          <div className={`switch-container ${isDarkMode ? "text" : "text2"}`}>
+          {/* <div className={`switch-container ${isDarkMode ? "text" : "text2"}`}>
             <input
               type="checkbox"
               id="toggle"
@@ -32,7 +32,7 @@ const Home = () => {
               <div id="text"></div>
               <div id="text2"></div>
             </label>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
