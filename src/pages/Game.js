@@ -111,6 +111,7 @@ const Game = () => {
   };
 
   return (
+
     <div className="flex items-center pt-10 flex-col">
       {"level:" + level}
       <div className="w-4/5 text-center">
@@ -147,6 +148,7 @@ const Game = () => {
           </div>
         )}
       </form>
+
     </div>
   );
 };
