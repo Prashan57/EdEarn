@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Layout from "./Layout/layout";
 
 const Game = () => {
   const [fail, setFail] = useState(false);
@@ -111,45 +112,45 @@ const Game = () => {
   };
 
   return (
-
-    <div className="flex items-center pt-10 flex-col">
-      {"level:" + level}
-      <div className="w-4/5 text-center">
-        <div
-          className="bg-slate-300 h-40rem w-full rounded-2xl relative"
-          id="container"
-        ></div>
+    <Layout>
+      <div className="flex items-center pt-10 flex-col">
+        {"level:" + level}
+        <div className="w-4/5 text-center">
+          <div
+            className="bg-slate-300 h-40rem w-full rounded-2xl relative"
+            id="container"
+          ></div>
+        </div>
+        <div className="py-10">{meaning}</div>
+        <form
+          className="flex justify-center gap-4 w-full"
+          onSubmit={(e) => handleSubmit(e)}
+        >
+          <input
+            type="text"
+            className="w-2/3 h-10 rounded-2xl text-xl border border-solid border-black border-2 px-10"
+            onChange={(e) => setAnswer(e.target.value)}
+          ></input>
+          <button className="bg-black text-white text-2xl font-bold rounded-2xl w-32">
+            Go
+          </button>
+          {fail && "fail"}
+          {found && (
+            <div className="absolute w-2/3 h-2/3 bg-black top-20 text-white">
+              <h3>Success : {level}</h3>
+              <button onClick={handleNextLevel}>Next Level</button>
+            </div>
+          )}
+          {fail && (
+            <div className="absolute w-2/3 h-2/3 bg-black top-20 text-white">
+              <div>Game Over</div>
+              <div>Level: {level}</div>
+              <button onClick={handleRestart}>Restart</button>
+            </div>
+          )}
+        </form>
       </div>
-      <div className="py-10">{meaning}</div>
-      <form
-        className="flex justify-center gap-4 w-full"
-        onSubmit={(e) => handleSubmit(e)}
-      >
-        <input
-          type="text"
-          className="w-2/3 h-10 rounded-2xl text-xl border border-solid border-black border-2 px-10"
-          onChange={(e) => setAnswer(e.target.value)}
-        ></input>
-        <button className="bg-black text-white text-2xl font-bold rounded-2xl w-32">
-          Go
-        </button>
-        {fail && "fail"}
-        {found && (
-          <div className="absolute w-2/3 h-2/3 bg-black top-20 text-white">
-            <h3>Success : {level}</h3>
-            <button onClick={handleNextLevel}>Next Level</button>
-          </div>
-        )}
-        {fail && (
-          <div className="absolute w-2/3 h-2/3 bg-black top-20 text-white">
-            <div>Game Over</div>
-            <div>Level: {level}</div>
-            <button onClick={handleRestart}>Restart</button>
-          </div>
-        )}
-      </form>
-
-    </div>
+    </Layout>
   );
 };
 
