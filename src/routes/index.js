@@ -1,6 +1,7 @@
 import Home from "../pages/Home";
 import Payment from "../pages/Payment";
 import Login from "../pages/Login";
+import Game from "../pages/Game";
 
 export const routes = [
   {
@@ -18,5 +19,10 @@ export const routes = [
     name: "Login",
     element: <Login />,
     path: "/login",
+  },
+  {
+    name: "Game",
+    element: <Game />,
+    path: "/game",
   },
 ];
