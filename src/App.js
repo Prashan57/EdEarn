@@ -1,17 +1,19 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
-import Chat from "./pages/Chat";
+import Context from "./context/context";
+
 function App() {
   return (
     <div className="App">
-      <Chat room="room1" />
-      {/* <BrowserRouter>
-        <Routes>
-          {routes.map((items) => (
-            <Route path={items.path} element={items.element} />
-          ))}
-        </Routes>
-      </BrowserRouter> */}
+      <Context>
+        <BrowserRouter>
+          <Routes>
+            {routes.map((items, index) => (
+              <Route key={index} path={items.path} element={items.element} />
+            ))}
+          </Routes>
+        </BrowserRouter>
+      </Context>
     </div>
   );
 }

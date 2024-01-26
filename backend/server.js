@@ -1,17 +1,27 @@
 import express from "express";
 import router from "./routes/index.js";
 import cors from "cors";
+import mongoose from "mongoose";
 import { Server } from "socket.io";
 
 const app = express();
 
 app.use(cors("*"));
 app.use(express.json());
-app.use("/", router);
+app.use("/api", router);
 
 const server = app.listen(9000, () => {
   console.log("listening at 9000");
 });
+
+mongoose
+  .connect("mongodb://127.0.0.1:27017/edearn")
+  .then(() => {
+    console.log("DB connection successfully");
+  })
+  .catch((err) => {
+    console.log("DB connection error", err);
+  });
 
 const io = new Server(server, {
   cors: {
@@ -27,7 +37,8 @@ io.on("connection", (socket) => {
     console.log(`User joined in room ${room}`);
     socket.on("message", (data) => {
       io.to(data.room).emit("message", data.message);
-      console.log(data.message);
+      io.to(data.room).emit("points", data.points);
+      console.log(data.points);
     });
   });
 

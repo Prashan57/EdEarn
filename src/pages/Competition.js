@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
+import context from "../context/mainContext";
 
-const Chat = ({ room }) => {
+const Competition = ({ room }) => {
   const [socket, setSocket] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [pts, setPts] = useState();
+  const [points, setPoints] = useState(0);
 
+  const { user } = useContext(context);
   useEffect(() => {
     const newSocket = io("http://localhost:9000");
     setSocket(newSocket);
 
     return () => {
+      //CleanUp Function
       newSocket.disconnect();
     };
   }, []);
@@ -21,6 +26,10 @@ const Chat = ({ room }) => {
       socket.on("message", (newMessage) => {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       });
+      socket.on("points", (points) => {
+        console.log(points);
+        setPts(points);
+      });
     }
   }, [socket]);
 
@@ -29,6 +38,7 @@ const Chat = ({ room }) => {
       socket.emit("joinRoom", room);
 
       return () => {
+        //or newSocket.disconnect();
         socket.emit("leaveRoom", room);
       };
     }
@@ -36,7 +46,8 @@ const Chat = ({ room }) => {
 
   const sendMessage = () => {
     if (message?.trim() !== "") {
-      socket.emit("message", { room: room, message: message });
+      setPoints((prev) => prev + 1);
+      socket.emit("message", { room: room, message: message, points: points });
       setMessage("");
     }
     console.log("baka");
@@ -45,7 +56,9 @@ const Chat = ({ room }) => {
   return (
     <div>
       <div>
+        {pts && <h1>{pts}</h1>}
         <center>
+          {user && <div>welcome{user.email}</div>}
           {messages.map((msg, index) => (
             <div key={index}>{msg}</div>
           ))}
@@ -63,4 +76,4 @@ const Chat = ({ room }) => {
   );
 };
 
-export default Chat;
+export default Competition;
