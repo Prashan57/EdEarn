@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { data } from "./component/arr";
-import { useNavigate } from "react-router";
+// import { data } from "./component/arr";
+// import { useNavigate } from "react-router";
+import axios from "axios";
 
 const Game = () => {
   const [fail, setFail] = useState(false);
@@ -8,9 +9,17 @@ const Game = () => {
   const [found, setFound] = useState(false);
   const [level, setLevel] = useState(2);
   const [flag, setFlag] = useState(0);
+  const [data, setData] = useState([]);
   const correctAns = "Rose";
-  const navigate = useNavigate();
-
+  // const navigate = useNavigate();
+  const getData = async () => {
+    const datas = await axios.get(
+      `https://random-word-api.herokuapp.com/word?number=${level}`
+    );
+    console.log(datas.data);
+    setData(datas.data);
+    return 0;
+  };
   const createFallingDiv = (i) => {
     const container = document.getElementById("container");
     const containerHeight = container.clientHeight;
@@ -18,7 +27,7 @@ const Game = () => {
     const fallingDiv = document.createElement("div");
     fallingDiv.className = "falling-div";
     fallingDiv.className = "absolute";
-    fallingDiv.textContent = data[i].name;
+    fallingDiv.textContent = data[i];
 
     let startX = Math.random() * (container.clientWidth - 100);
     const startPosition = 0;
@@ -54,12 +63,15 @@ const Game = () => {
     const container = document.getElementById("container");
     const containerHeight = container.clientHeight;
     container.innerHTML = "";
-
-    for (let i = 0; i < level; i++) {
-      setTimeout(() => {
-        createFallingDiv(i);
-      }, i * 500);
-    }
+    const letsDO = async () => {
+      await getData();
+      for (let i = 0; i < level; i++) {
+        setTimeout(() => {
+          createFallingDiv(i);
+        }, i * 500);
+      }
+    };
+    letsDO();
   }, [level]);
 
   const handleNextLevel = (e) => {
@@ -107,6 +119,7 @@ const Game = () => {
         <button className="bg-black text-white text-2xl font-bold rounded-2xl w-32">
           Go
         </button>
+        {data[0]}
         {fail && "fail"}
         {found && (
           <div className="absolute w-2/3 h-2/3 bg-black top-20 text-white">
