@@ -2,6 +2,7 @@ import Home from "../pages/Home";
 import Payment from "../pages/Payment";
 import Login from "../pages/Login";
 import Game from "../pages/Game";
+import Dictionary from "../pages/dictionary";
 
 export const routes = [
   {
@@ -24,5 +25,10 @@ export const routes = [
     name: "Game",
     element: <Game />,
     path: "/game",
+  },
+  {
+    name: "Dictionary",
+    element: <Dictionary />,
+    path: "/dictionary",
   },
 ];
